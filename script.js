@@ -79,7 +79,42 @@ function resetState(){
 function selectAnswer(e){
     const selectedButton = e.target;
     const isCorrect = selectedButton.dataset.correct === 'true';
-    
+    if(isCorrect){
+        selectedButton.classList.add('correct');
+        score++;
+    }else{
+        selectedButton.classList.add('incorrect');
+    }
+    Array.from(answerButtons.children).forEach(button => {
+        if(button.dataset.correct === 'true'){
+            button.classList.add('correct');
+        }
+        button.disabled = true;
+    });
+    nxtButton.style.display = 'block';
 }
+
+function showScore(){
+    resetState();
+    questionElement.innerHTML = "Your score is " + score + " out of " + questions.length;
+    nxtButton.innerHTML = "Restart Quiz";
+    nxtButton.style.display = 'block';
+}
+
+function handleNextButton(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        showQuestion();
+}else showScore();
+}
+
+
+nxtButton.addEventListener('click', () => {
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    }else{
+        startQuiz();
+    }
+});
 
 startQuiz();
